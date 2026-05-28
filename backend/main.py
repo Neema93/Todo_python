@@ -12,5 +12,12 @@ conn = psycopg2.connect(
     host="localhost",
     port="5432"
 )
-
 cursor = conn.cursor()
+
+@app.get("/todo")
+def get_tasks():
+    cursor.execute("SELECT * FROM todo")
+    rows = cursor.fetchall()
+    return rows
+
+
