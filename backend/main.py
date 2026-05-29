@@ -54,3 +54,11 @@ def add_task(task: Task):
     )
     conn.commit()
     return {"message": "Task added"}
+@app.put("/task/{task_id}")
+def update_task(task_id: int, task: Task):
+    cursor.execute(
+        "UPDATE task SET name=%s, checked=%s WHERE id=%s",
+        (task.name, task.checked, task_id)
+    )
+    conn.commit()
+    return {"message": "Updated"}
