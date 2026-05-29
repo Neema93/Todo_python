@@ -62,3 +62,8 @@ def update_task(task_id: int, task: Task):
     )
     conn.commit()
     return {"message": "Updated"}
+@app.delete("/task/{task_id}")
+def delete_task(task_id: int):
+    cursor.execute("DELETE FROM task WHERE id=%s", (task_id,))
+    conn.commit()
+    return {"message": "Deleted"}
