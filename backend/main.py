@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import psycopg2
 
+
 app = FastAPI()
 
 # connect PostgreSQL
@@ -13,7 +14,9 @@ conn = psycopg2.connect(
     port="5432"
 )
 cursor = conn.cursor()
-
+class Task(BaseModel):
+    name: str
+    checked: bool = False
 @app.get("/task")
 def get_tasks():
     cursor.execute("SELECT * FROM task")
