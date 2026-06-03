@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import psycopg2
 
-
 app = FastAPI()
 
 # connect PostgreSQL
@@ -17,38 +16,21 @@ cursor = conn.cursor()
 class Task(BaseModel):
     name: str
     checked: bool = False
-@app.get("/task")
+
+#get all tasks
+@app.get("/tasks")
 def get_tasks():
     cursor.execute("SELECT * FROM task")
     rows = cursor.fetchall()
     return rows
 
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-import psycopg2
-
-app = FastAPI()
-
-# connect PostgreSQL
-conn = psycopg2.connect(
-    dbname="todo_db",
-    user="heeya",
-    password="heeya",
-    host="localhost",
-    port="5432"
-)
-cursor = conn.cursor()
-
-@app.get("/task")
-def get_tasks():
-    cursor.execute("SELECT * FROM task")
-    rows = cursor.fetchall()
-    return rows
+# get task by id
 @app.get("/task/{task_id}")
 def get_task(task_id: int):
     cursor.execute("SELECT * FROM task WHERE id=%s", (task_id,))
     return cursor.fetchone()
+
+# add new tasks
 @app.post("/task")
 def add_task(task: Task):
     cursor.execute(
@@ -57,6 +39,8 @@ def add_task(task: Task):
     )
     conn.commit()
     return {"message": "Task added"}
+
+#update task
 @app.put("/task/{task_id}")
 def update_task(task_id: int, task: Task):
     cursor.execute(
@@ -65,6 +49,8 @@ def update_task(task_id: int, task: Task):
     )
     conn.commit()
     return {"message": "Updated"}
+
+#delete task
 @app.delete("/task/{task_id}")
 def delete_task(task_id: int):
     cursor.execute("DELETE FROM task WHERE id=%s", (task_id,))
