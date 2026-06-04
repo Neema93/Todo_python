@@ -1,6 +1,6 @@
 
 import "./Header.scss";
-import Todoinput from "./Todoinput";
+import Todoinput from "./TodoAdd";
 export default function Header({ onAdd }) {
   return (
     <header className="header">

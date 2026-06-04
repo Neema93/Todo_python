@@ -1,5 +1,5 @@
 import TodoItem from "./TodoItem";
-
+import'./TodoList.scss';
 export default function TodoList({ tasks, onDelete, onToggle }) {
   return (
     <div className="todo-list">

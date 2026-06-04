@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import "./Todoinput.scss";
+import "./TodoAdd.scss";
 
 export default function Todoinput({ onAdd }) {
   const [todo, setTodo] = useState("");

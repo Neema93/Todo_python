@@ -1,0 +1,14 @@
+import axios from "axios";
+
+const API = "http://localhost:8000";
+
+export const getTasks = () => axios.get(`${API}/tasks`);
+
+export const addTask = (task) =>
+  axios.post(`${API}/task`, task);
+
+export const updateTask = (id, task) =>
+  axios.put(`${API}/task/${id}`, task);
+
+export const deleteTask = (id) =>
+  axios.delete(`${API}/task/${id}`);
