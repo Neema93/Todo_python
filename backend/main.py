@@ -1,12 +1,10 @@
-from http.client import HTTPException
-
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
+#create middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -30,7 +28,7 @@ class Task(BaseModel):
 #get all tasks
 @app.get("/tasks")
 def get_tasks():
-    cursor.execute("SELECT * FROM task")
+    cursor.execute("SELECT id, name, checked FROM task")
     rows = cursor.fetchall()
 
     return [
@@ -48,7 +46,7 @@ def get_task(task_id: int):
     task = cursor.fetchone()
 
     if not task:
-        return {"error": "Task not found"}
+        raise HTTPException(status_code=404, detail="Task not found")
 
     return {
         "id": task[0],
@@ -68,15 +66,14 @@ def add_task(task: Task):
     "name": task.name,
     "checked": task.checked
 }
-
+#check 
+def task_exists(task_id: int):
+    cursor.execute("SELECT id FROM task WHERE id=%s", (task_id,))
+    return cursor.fetchone() is not None
 #update task
 @app.put("/task/{task_id}")
 def update_task(task_id: int, task: Task):
-    
-    cursor.execute("SELECT id FROM task WHERE id=%s", (task_id,))
-    existing = cursor.fetchone()
-
-    if not existing:
+    if not task_exists(task_id):
         raise HTTPException(status_code=404, detail="Task not found")
 
     cursor.execute(
@@ -94,10 +91,9 @@ def update_task(task_id: int, task: Task):
 #delete task
 @app.delete("/task/{task_id}")
 def delete_task(task_id: int):
-    cursor.execute("SELECT id FROM task WHERE id=%s", (task_id,))
-    task = cursor.fetchone()
+   
 
-    if not task:
+    if not task_exists(task_id):
         raise HTTPException(status_code=404, detail="Task not found")
 
     cursor.execute("DELETE FROM task WHERE id=%s", (task_id,))
