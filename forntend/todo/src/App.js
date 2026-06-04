@@ -4,7 +4,7 @@ import Header from './component/Header';
 function App() {
   return (
        <div className="container">
-      <Header />
+   <Header onAdd={fetchTasks} />
     </div>
   );
 }
