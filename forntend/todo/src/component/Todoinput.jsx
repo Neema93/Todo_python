@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Header.scss";
+import "./Todoinput.scss";
 export default function Todoinput() {
 const [todo, setTodo] = useState("");
 

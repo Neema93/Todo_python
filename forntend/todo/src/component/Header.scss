@@ -10,19 +10,3 @@
     margin: 0;
   }
 }
-
-.todo-input {
-  display: flex;
-  gap: 10px;
-
-  input {
-    width: 300px;
-    padding: 10px;
-    font-size: 16px;
-  }
-
-  button {
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-}
